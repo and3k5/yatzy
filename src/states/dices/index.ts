@@ -3,7 +3,7 @@ import { createDice } from "@/objects/dice";
 import type { Scene } from "three";
 
 export const NO_OF_DICES = 6;
-
+const DISTANCE = 0.5;
 export function createState() {
     const dices: ReturnType<typeof createDice>[] = [];
 
@@ -33,8 +33,8 @@ export function createState() {
         },
         arrange() {
             dices.forEach((dice, i) => {
-                dice.mesh.position.x = i % 2 === 1 ? 1 : -1;
-                dice.mesh.position.y = -2 + Math.floor(i / 2) * 2;
+                dice.mesh.position.x = i % 2 === 1 ? DISTANCE : -DISTANCE;
+                dice.mesh.position.y = 0 - DISTANCE * 2 + Math.floor(i / 2) * DISTANCE * 2;
             });
         },
     };

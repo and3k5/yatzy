@@ -36,7 +36,7 @@ export function createDice() {
 
     const loader = new TextureLoader();
 
-    const geometry = new BoxGeometry();
+    const geometry = new BoxGeometry(0.5, 0.5, 0.5);
 
     const materials = images.map((x) => new MeshBasicMaterial({ map: loader.load(x) }));
 
