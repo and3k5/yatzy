@@ -1,10 +1,10 @@
 import type { AnimationTask } from "@/animation";
 import { createDice } from "@/objects/dice";
-import type { Scene } from "three";
+import type { Scene, WebGLRenderer } from "three";
 
 export const NO_OF_DICES = 6;
 const DISTANCE = 0.5;
-export function createState() {
+export function createState(renderer: WebGLRenderer) {
     const dices: ReturnType<typeof createDice>[] = [];
 
     for (let i = 0; i < NO_OF_DICES; i++) {
@@ -14,7 +14,7 @@ export function createState() {
     return {
         init(a: AnimationTask[]) {
             dices.forEach((x, i) => {
-                x.init(a);
+                x.init(a, renderer);
                 x.setValue(i + 1);
             });
         },

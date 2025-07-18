@@ -1,4 +1,11 @@
-import { BoxGeometry, Mesh, MeshBasicMaterial, Object3D, TextureLoader } from "three";
+import {
+    BoxGeometry,
+    Mesh,
+    MeshBasicMaterial,
+    Object3D,
+    TextureLoader,
+    WebGLRenderer,
+} from "three";
 import one from "./dice/face/1.svg?no-inline";
 import two from "./dice/face/2.svg?no-inline";
 import three from "./dice/face/3.svg?no-inline";
@@ -45,10 +52,12 @@ export function createDice() {
     let animations: AnimationTask[] | null = null;
 
     let animation: AnimationTask | null = null;
+    let renderer: WebGLRenderer | null = null;
 
     const dice = {
-        init(a: AnimationTask[]) {
+        init(a: AnimationTask[], r: WebGLRenderer) {
             animations = a;
+            renderer = r;
         },
         mesh,
         hold: false,
@@ -104,10 +113,16 @@ export function createDice() {
 
     mesh.addEventListener("pointerover", () => {
         renderMesh(mesh, dice.hold, true);
+        if (renderer) {
+            renderer.domElement.style.cursor = "pointer";
+        }
     });
 
     mesh.addEventListener("pointerout", () => {
         renderMesh(mesh, dice.hold, false);
+        if (renderer) {
+            renderer.domElement.style.cursor = "";
+        }
     });
 
     return dice;

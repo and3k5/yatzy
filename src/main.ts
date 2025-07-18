@@ -22,7 +22,8 @@ function init() {
     const texture = new THREE.TextureLoader().load("textures/crate.svg");
     texture.colorSpace = THREE.SRGBColorSpace;
 
-    const diceState = createDiceState();
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    const diceState = createDiceState(renderer);
 
     diceState.init(animations);
 
@@ -32,7 +33,6 @@ function init() {
 
     setInterval(() => diceState.randomize(), 1000);
 
-    renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animate);
