@@ -1,7 +1,6 @@
 import "./assets/main.css";
 
 import * as THREE from "three";
-import { createDice } from "./objects/dice";
 import { createState as createDiceState } from "./states/dices";
 import type { AnimationTask } from "./animation";
 import createIntervalHelper from "./utils/interval-helper";
@@ -9,7 +8,6 @@ import createIntervalHelper from "./utils/interval-helper";
 let camera: THREE.PerspectiveCamera;
 let scene: THREE.Scene;
 let renderer: THREE.WebGLRenderer;
-let mesh: THREE.Mesh;
 const animations: AnimationTask[] = [];
 
 init();
@@ -38,8 +36,6 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animate);
     document.body.appendChild(renderer.domElement);
-
-    //
 
     window.addEventListener("resize", onWindowResize);
 }

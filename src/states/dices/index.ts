@@ -19,7 +19,7 @@ export function createState() {
             });
         },
         randomize() {
-            dices.forEach((x, i) => {
+            dices.forEach((x) => {
                 x.setValue(1 + Math.round(Math.random() * (NO_OF_DICES - 1)));
             });
         },
