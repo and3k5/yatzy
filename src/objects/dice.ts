@@ -43,6 +43,8 @@ export function createDice() {
 
     let animations: AnimationTask[] | null = null;
 
+    let animation: AnimationTask | null = null;
+
     return {
         init(a: AnimationTask[]) {
             animations = a;
@@ -58,7 +60,7 @@ export function createDice() {
             meshModif.rotation.y = mtx[1];
             meshModif.rotation.z = mtx[2];
             if (animations) {
-                animations.push({
+                const anim: AnimationTask = {
                     run() {
                         const speed = 0.1;
                         const dx = meshModif.rotation.x - mesh.rotation.x;
@@ -69,6 +71,7 @@ export function createDice() {
                             mesh.rotation.x = meshModif.rotation.x;
                             mesh.rotation.y = meshModif.rotation.y;
                             mesh.rotation.z = meshModif.rotation.z;
+                            this.done = true;
                             return { done: true };
                         }
 
@@ -79,7 +82,13 @@ export function createDice() {
                             done: false,
                         };
                     },
-                });
+                    done: false,
+                };
+                if (animation != null) {
+                    animation.done = true;
+                }
+                animation = anim;
+                animations.push(anim);
             }
         },
         value: 1,

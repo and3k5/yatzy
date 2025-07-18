@@ -57,6 +57,10 @@ function animate() {
     const removals: AnimationTask[] = [];
 
     for (const task of animations) {
+        if (task.done) {
+            removals.push(task);
+            continue;
+        }
         const { done } = task.run();
         if (done) {
             removals.push(task);
