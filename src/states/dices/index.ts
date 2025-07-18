@@ -19,9 +19,14 @@ export function createState() {
             });
         },
         randomize() {
-            dices.forEach((x) => {
-                x.setValue(1 + Math.round(Math.random() * (NO_OF_DICES - 1)));
-            });
+            dices
+                .filter((x) => x.hold === false)
+                .forEach((x) => {
+                    x.setValue(1 + Math.round(Math.random() * (NO_OF_DICES - 1)));
+                });
+        },
+        holdDice(index: number) {
+            dices[index].hold = !dices[index].hold;
         },
         attach(scene: Scene) {
             dices.forEach((x) => scene.add(x.mesh));

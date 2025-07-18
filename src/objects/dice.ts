@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh, MeshBasicMaterial, TextureLoader } from "three";
+import { BoxGeometry, Mesh, MeshBasicMaterial, Object3D, TextureLoader } from "three";
 import one from "./dice/face/1.svg?no-inline";
 import two from "./dice/face/2.svg?no-inline";
 import three from "./dice/face/3.svg?no-inline";
@@ -6,6 +6,7 @@ import four from "./dice/face/4.svg?no-inline";
 import five from "./dice/face/5.svg?no-inline";
 import six from "./dice/face/6.svg?no-inline";
 import type { AnimationTask } from "@/animation";
+import type { EventMap } from "@/utils/pointer";
 
 const deg = Math.PI / 2;
 const rotationTable: [number, number, number][] = [
@@ -39,17 +40,18 @@ export function createDice() {
 
     const materials = images.map((x) => new MeshBasicMaterial({ map: loader.load(x) }));
 
-    const mesh = new Mesh(geometry, materials);
+    const mesh: Object3D<EventMap> & Mesh = new Mesh(geometry, materials);
 
     let animations: AnimationTask[] | null = null;
 
     let animation: AnimationTask | null = null;
 
-    return {
+    const dice = {
         init(a: AnimationTask[]) {
             animations = a;
         },
         mesh,
+        hold: false,
         setValue(value: number) {
             this.value = value;
 
@@ -93,4 +95,36 @@ export function createDice() {
         },
         value: 1,
     };
+
+    mesh.addEventListener("click", () => {
+        console.log("clicked a dice");
+        dice.hold = !dice.hold;
+        renderMesh(mesh, dice.hold, false);
+    });
+
+    mesh.addEventListener("pointerover", () => {
+        renderMesh(mesh, dice.hold, true);
+    });
+
+    mesh.addEventListener("pointerout", () => {
+        renderMesh(mesh, dice.hold, false);
+    });
+
+    return dice;
+}
+
+function renderMesh(mesh: Mesh, hold: boolean, hover: boolean) {
+    if (hold) {
+        mesh.scale.x = 1.2;
+        mesh.scale.y = 1.2;
+        mesh.scale.z = 1.2;
+    } else if (hover) {
+        mesh.scale.x = 1.1;
+        mesh.scale.y = 1.1;
+        mesh.scale.z = 1.1;
+    } else {
+        mesh.scale.x = 1;
+        mesh.scale.y = 1;
+        mesh.scale.z = 1;
+    }
 }

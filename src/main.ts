@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { createState as createDiceState } from "./states/dices";
 import type { AnimationTask } from "./animation";
 import createIntervalHelper from "./utils/interval-helper";
+import { createPointerListener } from "./utils/pointer";
 
 let camera: THREE.PerspectiveCamera;
 let scene: THREE.Scene;
@@ -35,6 +36,9 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animate);
+
+    createPointerListener(camera, renderer, scene);
+
     document.body.appendChild(renderer.domElement);
 
     window.addEventListener("resize", onWindowResize);
