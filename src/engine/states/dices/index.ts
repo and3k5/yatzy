@@ -2,20 +2,39 @@ import type { AnimationTask } from "@/engine/graphics/animation";
 import { createDice } from "@/objects/dice";
 import type { Scene, WebGLRenderer } from "three";
 import type { GameState } from "../base";
+import { useActionsStorage } from "@/engine/actions";
 
 export const NO_OF_DICES = 6;
 const DISTANCE = 0.5;
 
 interface DiceGameState extends GameState {
     holdDice(index: number): void;
-    randomize(): void;
 }
 export function createState(renderer: WebGLRenderer): DiceGameState {
+    const actionStorage = useActionsStorage();
     const dices: ReturnType<typeof createDice>[] = [];
 
     for (let i = 0; i < NO_OF_DICES; i++) {
         dices.push(createDice());
     }
+
+    const randomizeAction = actionStorage.createAction({
+        label: "Roll dice",
+        disabled: false,
+    });
+
+    function randomize() {
+        dices
+            .filter((x) => x.hold === false)
+            .forEach((x) => {
+                x.setValue(1 + Math.round(Math.random() * (NO_OF_DICES - 1)));
+            });
+    }
+
+    randomizeAction.addEventListener("click", () => {
+        console.log("CLICK");
+        randomize();
+    });
 
     return {
         init(a: AnimationTask[]) {
@@ -29,15 +48,10 @@ export function createState(renderer: WebGLRenderer): DiceGameState {
             });
         },
         enter() {
+            randomizeAction.visible = true;
         },
         leave() {
-        },
-        randomize() {
-            dices
-                .filter((x) => x.hold === false)
-                .forEach((x) => {
-                    x.setValue(1 + Math.round(Math.random() * (NO_OF_DICES - 1)));
-                });
+            randomizeAction.visible = false;
         },
         holdDice(index: number) {
             dices[index].hold = !dices[index].hold;

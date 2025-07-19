@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { createGame } from "./game";
+import { useActionsStorage } from "./engine/actions";
 const cnvs = ref<HTMLCanvasElement>();
 
+const actionStorage = useActionsStorage();
 
 onMounted(() => {
     createGame(cnvs.value);
@@ -27,5 +29,16 @@ onMounted(() => {
 </style>
 
 <template>
+    <div class="controls">
+        <button
+            class="action-btn"
+            type="button"
+            v-for="action in actionStorage.actions"
+            :key="action.key"
+            @click="action.dispatchEvent({ type: 'click' })"
+        >
+            {{ action.label }}
+        </button>
+    </div>
     <canvas ref="cnvs"></canvas>
 </template>

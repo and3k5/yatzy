@@ -9,7 +9,6 @@ export function createStates(renderer: WebGLRenderer, animations: AnimationTask[
     diceState.attach(scene);
 
     diceState.enter();
-    setInterval(() => diceState.randomize(), 1000);
 
     return {
         diceState,
