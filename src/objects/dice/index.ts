@@ -6,12 +6,12 @@ import {
     TextureLoader,
     WebGLRenderer,
 } from "three";
-import one from "./dice/face/1.svg?no-inline";
-import two from "./dice/face/2.svg?no-inline";
-import three from "./dice/face/3.svg?no-inline";
-import four from "./dice/face/4.svg?no-inline";
-import five from "./dice/face/5.svg?no-inline";
-import six from "./dice/face/6.svg?no-inline";
+import one from "./face/1.svg?no-inline";
+import two from "./face/2.svg?no-inline";
+import three from "./face/3.svg?no-inline";
+import four from "./face/4.svg?no-inline";
+import five from "./face/5.svg?no-inline";
+import six from "./face/6.svg?no-inline";
 import type { AnimationTask } from "@/animation";
 import type { EventMap } from "@/utils/pointer";
 
