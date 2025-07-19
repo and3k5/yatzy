@@ -1,4 +1,4 @@
-import type { AnimationTask } from "@/animation";
+import type { AnimationTask } from "@/engine/graphics/animation";
 import { createDice } from "@/objects/dice";
 import type { Scene, WebGLRenderer } from "three";
 

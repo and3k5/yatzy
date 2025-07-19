@@ -12,8 +12,8 @@ import three from "./face/3.svg?no-inline";
 import four from "./face/4.svg?no-inline";
 import five from "./face/5.svg?no-inline";
 import six from "./face/6.svg?no-inline";
-import type { AnimationTask } from "@/animation";
-import type { EventMap } from "@/utils/pointer";
+import type { AnimationTask } from "@/engine/graphics/animation";
+import type { EventMap } from "@/engine/graphics/pointer-listener";
 
 const deg = Math.PI / 2;
 const rotationTable: [number, number, number][] = [
