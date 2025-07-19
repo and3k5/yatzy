@@ -26,6 +26,14 @@ onMounted(() => {
     padding: 15px;
     font-size: 15pt;
 }
+.graphics-canvas {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+}
 </style>
 
 <template>
@@ -40,5 +48,5 @@ onMounted(() => {
             {{ action.label }}
         </button>
     </div>
-    <canvas ref="cnvs"></canvas>
+    <canvas ref="cnvs" class="graphics-canvas"></canvas>
 </template>
