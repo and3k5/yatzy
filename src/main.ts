@@ -1,9 +1,8 @@
+import { createApp } from "vue";
+import App from "./App.vue";
 import "./assets/main.css";
 
-import { initGraphics } from "./engine/graphics";
-import { createStates } from "./engine/states";
 
-const { renderer, scene, animations } = initGraphics();
-createStates(renderer, animations, scene);
+const app = createApp(App);
 
-document.body.appendChild(renderer.domElement);
+app.mount("#app");

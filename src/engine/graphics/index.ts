@@ -9,14 +9,14 @@ function createCamera() {
     return camera;
 }
 
-export function initGraphics() {
+export function initGraphics(canvas: HTMLCanvasElement | OffscreenCanvas | undefined) {
     const camera = createCamera();
 
     const animations: AnimationTask[] = [];
 
     const scene = new Scene();
 
-    const renderer = new WebGLRenderer({ antialias: true });
+    const renderer = new WebGLRenderer({ antialias: true, canvas: canvas });
 
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
