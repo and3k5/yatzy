@@ -1,0 +1,35 @@
+name: Deploy to gh-pages
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches:
+            - main
+        types:
+            - closed
+
+jobs:
+    deploy:
+        if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  persist-credentials: false
+            - name: Use Node.js 22
+              uses: actions/setup-node@v2
+              with:
+                  node-version: "22"
+            - run: |
+                  npm ci
+                  npm run build
+              # npm run test
+            - name: Deploy 🚀
+              uses: JamesIves/github-pages-deploy-action@4.7.3
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  BRANCH: gh-pages # The branch the action should deploy to.
+                  FOLDER: dist # The folder the action should deploy.
+                  CLEAN: true # Automatically remove deleted files from the deploy branch
