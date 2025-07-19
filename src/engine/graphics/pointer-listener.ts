@@ -60,7 +60,8 @@ export function createPointerListener(
         });
     });
 
-    window.addEventListener("click", () => {
+    renderer.domElement.addEventListener("click", (e) => {
+        e.preventDefault();
         intersects.forEach((hit) => {
             hit.object.dispatchEvent({
                 type: "click",
