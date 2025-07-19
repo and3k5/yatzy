@@ -1,5 +1,4 @@
 import type { AnimationTask } from "@/engine/graphics/animation";
-import createIntervalHelper from "@/utils/interval-helper";
 import { createPointerListener } from "@/engine/graphics/pointer-listener";
 import { Camera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
@@ -41,8 +40,6 @@ export function initGraphics(canvas: HTMLCanvasElement | OffscreenCanvas | undef
     };
 }
 
-const logInterval = createIntervalHelper(500).off();
-
 function createAnimate(
     camera: Camera,
     scene: Scene,
@@ -65,12 +62,6 @@ function createAnimate(
             if (done) {
                 removals.push(task);
             }
-        }
-
-        if (logInterval.shouldLog()) {
-            logInterval.markExecution();
-            console.debug("Ran " + animations.length + " animation tasks");
-            console.debug(" - " + removals.length + " of them where done");
         }
 
         removals.forEach((x) => animations.splice(animations.indexOf(x), 1));

@@ -106,7 +106,6 @@ export function createDice() {
     };
 
     mesh.addEventListener("click", () => {
-        console.log("clicked a dice");
         dice.hold = !dice.hold;
         renderMesh(mesh, dice.hold, false);
     });

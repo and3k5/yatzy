@@ -32,7 +32,6 @@ export function createState(renderer: WebGLRenderer): DiceGameState {
     }
 
     randomizeAction.addEventListener("click", () => {
-        console.log("CLICK");
         randomize();
     });
 
