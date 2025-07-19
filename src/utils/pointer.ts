@@ -27,8 +27,8 @@ export function createPointerListener(
     let intersects: Intersection<Object3D<EventMap>>[] = [];
 
     window.addEventListener("pointermove", (e) => {
-        const width = renderer.domElement.width;
-        const height = renderer.domElement.height;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
         mouse.set((e.clientX / width) * 2 - 1, -(e.clientY / height) * 2 + 1);
         raycaster.setFromCamera(mouse, camera);
         intersects = raycaster.intersectObjects(scene.children, true);
