@@ -1,32 +1,33 @@
-import type { Scene } from "three";
+import type { Scene, Vector3 } from "three";
 import type { AnimationTask } from "../graphics/animation";
 
 export interface GameState {
     init(a: AnimationTask[]): void;
-    attach(scene: Scene): void;
+    attach(scene: Scene, scenePosition: Vector3): void;
     enter(): void;
     leave(): void;
+    scenePosition?: Vector3;
 }
 
 export function createStateController(a: AnimationTask[], scene: Scene) {
     const states: GameState[] = [];
 
-    let currentState: GameState | null = null;
-
     return {
-        addState<TGameState extends GameState>(state: TGameState) {
+        addState<TGameState extends GameState>(state: TGameState, scenePosition: Vector3) {
             states.push(state);
             state.init(a);
-            state.attach(scene);
+            state.attach(scene, scenePosition);
+            state.scenePosition = scenePosition;
             return state;
         },
+        currentState: null as GameState | null,
         states,
         enter(state: GameState) {
-            if (currentState) {
-                currentState.leave();
+            if (this.currentState) {
+                this.currentState.leave();
             }
-            currentState = state;
-            currentState.enter();
+            this.currentState = state;
+            this.currentState.enter();
         },
     };
 }

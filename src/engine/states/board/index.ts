@@ -2,9 +2,12 @@ import { createBoard } from "@/objects/board";
 import type { GameState } from "../base";
 
 import * as labels from "./lang";
+import { useActionsStorage } from "@/engine/actions";
 
-export function createState(): GameState {
+export function createState(goBackToDices: () => void): GameState {
     const board = createBoard();
+
+    const actionStorage = useActionsStorage();
 
     const lang = "en";
 
@@ -29,17 +32,29 @@ export function createState(): GameState {
     board.addItem(txt["yatzy"]);
     // Total
 
+    const backToDices = actionStorage.createAction({
+        label: "Back to dices",
+        disabled: false,
+    });
+
+    backToDices.addEventListener("click", () => {
+        goBackToDices();
+    });
+
     return {
         init() {
             // Initialize the board state
         },
         enter() {
-            // Actions to perform when entering the board state
+            backToDices.visible = true;
         },
         leave() {
-            // Actions to perform when leaving the board state
+            backToDices.visible = false;
         },
-        attach(scene) {
+        attach(scene, scenePosition) {
+            board.mesh.position.x += scenePosition.x;
+            board.mesh.position.y += scenePosition.y;
+            board.mesh.position.z += scenePosition.z;
             scene.add(board.mesh);
         },
     };

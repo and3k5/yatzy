@@ -1,4 +1,5 @@
-import { BoxGeometry, Mesh, MeshPhongMaterial } from "three";
+import { BoxGeometry, Mesh } from "three";
+import { MeshBasicMaterial } from "three";
 import { createItem } from "./item";
 
 export function createBoard() {
@@ -8,11 +9,11 @@ export function createBoard() {
     const boardDepth = 0.1;
 
     const geometry = new BoxGeometry(boardWidth, boardHeight, boardDepth);
-    const material = new MeshPhongMaterial({ color: 0xffffff });
+    const material = new MeshBasicMaterial({ color: 0xffffff });
     const mesh = new Mesh(geometry, material);
 
     // Optional: Add a slight bevel or rounded corners for realism (requires extra geometry work)
-    mesh.position.set(0, 0, 0);
+    //mesh.position.set(0, 0, 0);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 

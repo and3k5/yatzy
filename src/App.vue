@@ -38,15 +38,17 @@ onMounted(() => {
 
 <template>
     <div class="controls">
-        <button
-            class="action-btn"
-            type="button"
-            v-for="action in actionStorage.actions"
-            :key="action.key"
-            @click="action.dispatchEvent({ type: 'click' })"
-        >
-            {{ action.label }}
-        </button>
+        <template v-for="action in actionStorage.actions">
+            <button
+                class="action-btn"
+                type="button"
+                v-if="action.visible"
+                :key="action.key"
+                @click="action.dispatchEvent({ type: 'click' })"
+            >
+                {{ action.label }}
+            </button>
+        </template>
     </div>
     <canvas ref="cnvs" class="graphics-canvas"></canvas>
 </template>

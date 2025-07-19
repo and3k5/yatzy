@@ -1,6 +1,6 @@
 import type { AnimationTask } from "@/engine/graphics/animation";
 import { createDice } from "@/objects/dice";
-import type { Scene, WebGLRenderer } from "three";
+import type { WebGLRenderer } from "three";
 import type { GameState } from "../base";
 import { useActionsStorage } from "@/engine/actions";
 
@@ -10,7 +10,7 @@ const DISTANCE = 0.5;
 interface DiceGameState extends GameState {
     holdDice(index: number): void;
 }
-export function createState(renderer: WebGLRenderer): DiceGameState {
+export function createState(renderer: WebGLRenderer, enterBoardState: () => void): DiceGameState {
     const actionStorage = useActionsStorage();
     const dices: ReturnType<typeof createDice>[] = [];
 
@@ -23,16 +23,21 @@ export function createState(renderer: WebGLRenderer): DiceGameState {
         disabled: false,
     });
 
-    function randomize() {
+    randomizeAction.addEventListener("click", () => {
         dices
             .filter((x) => x.hold === false)
             .forEach((x) => {
                 x.setValue(1 + Math.round(Math.random() * (NO_OF_DICES - 1)));
             });
-    }
+    });
 
-    randomizeAction.addEventListener("click", () => {
-        randomize();
+    const lookAtBoard = actionStorage.createAction({
+        label: "Look at board",
+        disabled: false,
+    });
+
+    lookAtBoard.addEventListener("click", () => {
+        enterBoardState();
     });
 
     return {
@@ -48,15 +53,22 @@ export function createState(renderer: WebGLRenderer): DiceGameState {
         },
         enter() {
             randomizeAction.visible = true;
+            lookAtBoard.visible = true;
         },
         leave() {
             randomizeAction.visible = false;
+            lookAtBoard.visible = false;
         },
         holdDice(index: number) {
             dices[index].hold = !dices[index].hold;
         },
-        attach(scene: Scene) {
-            dices.forEach((x) => scene.add(x.mesh));
+        attach(scene, scenePosition) {
+            dices.forEach((x) => {
+                x.mesh.position.x += scenePosition.x;
+                x.mesh.position.y += scenePosition.y;
+                x.mesh.position.z += scenePosition.z;
+                scene.add(x.mesh);
+            });
         },
     };
 }

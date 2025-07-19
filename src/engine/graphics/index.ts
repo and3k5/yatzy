@@ -1,6 +1,7 @@
 import type { AnimationTask } from "@/engine/graphics/animation";
 import { createPointerListener } from "@/engine/graphics/pointer-listener";
 import { Camera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import type { createStateController } from "../states/base";
 
 function createCamera() {
     const camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -27,7 +28,8 @@ export function initGraphics(canvas: HTMLCanvasElement | OffscreenCanvas | undef
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    const animate = createAnimate(camera, scene, renderer, animations);
+    const ctrl: { value: ReturnType<typeof createStateController> | null } = { value: null };
+    const animate = createAnimate(camera, scene, renderer, animations, ctrl);
     renderer.setAnimationLoop(animate);
 
     createPointerListener(camera, renderer, scene);
@@ -37,6 +39,9 @@ export function initGraphics(canvas: HTMLCanvasElement | OffscreenCanvas | undef
         scene,
         camera,
         animations,
+        setController(c: ReturnType<typeof createStateController>) {
+            ctrl.value = c;
+        },
     };
 }
 
@@ -45,11 +50,14 @@ function createAnimate(
     scene: Scene,
     renderer: WebGLRenderer,
     animations: AnimationTask[],
+    ctrl: { value: ReturnType<typeof createStateController> | null },
 ) {
     return function () {
-        camera.position.x = Math.sin(Date.now() * 0.001) * 0.5;
-        camera.position.y = Math.cos(Date.now() * 0.001) * 1;
-        camera.lookAt(scene.position);
+        camera.position.x =
+            (ctrl.value?.currentState?.scenePosition?.x ?? 0) + Math.sin(Date.now() * 0.001) * 0.5;
+        camera.position.y =
+            (ctrl.value?.currentState?.scenePosition?.x ?? 0) + Math.cos(Date.now() * 0.001) * 1;
+        camera.lookAt(ctrl.value?.currentState?.scenePosition ?? scene.position);
 
         const removals: AnimationTask[] = [];
 
