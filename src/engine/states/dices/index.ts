@@ -18,6 +18,15 @@ export function createState(renderer: WebGLRenderer, enterBoardState: () => void
         dices.push(createDice());
     }
 
+    const lookAtBoard = actionStorage.createAction({
+        label: "Look at board",
+        disabled: false,
+    });
+
+    lookAtBoard.addEventListener("click", () => {
+        enterBoardState();
+    });
+
     const randomizeAction = actionStorage.createAction({
         label: "Roll dice",
         disabled: false,
@@ -29,15 +38,6 @@ export function createState(renderer: WebGLRenderer, enterBoardState: () => void
             .forEach((x) => {
                 x.setValue(1 + Math.round(Math.random() * (NO_OF_DICES - 1)));
             });
-    });
-
-    const lookAtBoard = actionStorage.createAction({
-        label: "Look at board",
-        disabled: false,
-    });
-
-    lookAtBoard.addEventListener("click", () => {
-        enterBoardState();
     });
 
     return {
