@@ -56,6 +56,13 @@ export function createState(goBackToDices: () => void): GameState {
             board.mesh.position.y += scenePosition.y;
             board.mesh.position.z += scenePosition.z;
             scene.add(board.mesh);
+            board.items.forEach((item, index) => {
+                const itemMesh = item.mesh;
+                itemMesh.position.x = board.mesh.position.x;
+                itemMesh.position.y = board.mesh.position.y + 0.5 + index * 0.1;
+                itemMesh.position.z = board.mesh.position.z + 0.1;
+                scene.add(itemMesh);
+            });
         },
     };
 }

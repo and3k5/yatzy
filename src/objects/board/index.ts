@@ -12,8 +12,6 @@ export function createBoard() {
     const material = new MeshBasicMaterial({ color: 0xffffff });
     const mesh = new Mesh(geometry, material);
 
-    // Optional: Add a slight bevel or rounded corners for realism (requires extra geometry work)
-    //mesh.position.set(0, 0, 0);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 
