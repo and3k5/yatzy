@@ -52,12 +52,24 @@ function createAnimate(
     animations: AnimationTask[],
     ctrl: { value: ReturnType<typeof createStateController> | null },
 ) {
+    let lookTarget = scene.position;
+    let cameraPosition = camera.position.clone();
     return function () {
-        camera.position.x =
-            (ctrl.value?.currentState?.scenePosition?.x ?? 0) + Math.sin(Date.now() * 0.001) * 0.5;
-        camera.position.y =
-            (ctrl.value?.currentState?.scenePosition?.x ?? 0) + Math.cos(Date.now() * 0.001) * 1;
-        camera.lookAt(ctrl.value?.currentState?.scenePosition ?? scene.position);
+        const cLookTarget = ctrl.value?.currentState?.scenePosition ?? scene.position;
+
+        const cameraTargetPosition = cLookTarget.clone().setZ(camera.position.z);
+
+        cameraPosition = cameraPosition.clone().lerp(cameraTargetPosition, 0.125);
+
+        camera.position.x = cameraPosition.x + Math.sin(Date.now() * 0.001) * 0.5;
+        camera.position.y = cameraPosition.y + Math.cos(Date.now() * 0.001) * 1;
+
+        lookTarget = lookTarget.clone().lerp(cLookTarget, 0.125);
+
+        // console.log(`Camera position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z} looking at ${lookTarget.x}, ${lookTarget.y}, ${lookTarget.z}`);
+        // console.log(`Target position: ${cameraTargetPosition.x}, ${cameraTargetPosition.y}, ${cameraTargetPosition.z} looking at ${cLookTarget.x}, ${cLookTarget.y}, ${cLookTarget.z}`);
+
+        camera.lookAt(lookTarget);
 
         const removals: AnimationTask[] = [];
 
