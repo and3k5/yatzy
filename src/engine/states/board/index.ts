@@ -21,23 +21,23 @@ export function createState(goBackToDices: () => void): GameState {
 
     const txt = labels[lang]["default"];
 
-    board.addItem(txt["1s"]);
-    board.addItem(txt["2s"]);
-    board.addItem(txt["3s"]);
-    board.addItem(txt["4s"]);
-    board.addItem(txt["5s"]);
-    board.addItem(txt["6s"]);
+    board.addField("1s", txt["1s"]);
+    board.addField("2s", txt["2s"]);
+    board.addField("3s", txt["3s"]);
+    board.addField("4s", txt["4s"]);
+    board.addField("5s", txt["5s"]);
+    board.addField("6s", txt["6s"]);
     // Sum
     // Bonus
-    board.addItem(txt["1pair"]);
-    board.addItem(txt["2pairs"]);
-    board.addItem(txt["3ofakind"]);
-    board.addItem(txt["4ofakind"]);
-    board.addItem(txt["low"]);
-    board.addItem(txt["high"]);
-    board.addItem(txt["house"]);
-    board.addItem(txt["chance"]);
-    board.addItem(txt["yatzy"]);
+    board.addField("1pair", txt["1pair"]);
+    board.addField("2pairs", txt["2pairs"]);
+    board.addField("3ofakind", txt["3ofakind"]);
+    board.addField("4ofakind", txt["4ofakind"]);
+    board.addField("low", txt["low"]);
+    board.addField("high", txt["high"]);
+    board.addField("house", txt["house"]);
+    board.addField("chance", txt["chance"]);
+    board.addField("yatzy", txt["yatzy"]);
     // Total
 
     const backToDices = actionStorage.createAction({

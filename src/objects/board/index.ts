@@ -1,6 +1,6 @@
 import { BoxGeometry, Mesh } from "three";
 import { MeshBasicMaterial } from "three";
-import { createItem } from "./item";
+import { createItem, type ItemType } from "./item";
 
 export function createBoard({
     boardWidth,
@@ -23,8 +23,11 @@ export function createBoard({
     return {
         items: [] as ReturnType<typeof createItem>[],
         mesh,
-        addItem(label: string) {
-            this.items.push(createItem(label));
+        addItem(key: string, label: string, type: ItemType) {
+            this.items.push(createItem(key, label, type));
+        },
+        addField(key: string, label: string) {
+            this.addItem(key, label, "field");
         },
     };
 }
