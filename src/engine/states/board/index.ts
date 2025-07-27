@@ -4,8 +4,16 @@ import type { GameState } from "../base";
 import * as labels from "./lang";
 import { useActionsStorage } from "@/engine/actions";
 
+const boardWidth = 4;
+const boardHeight = 4;
+const boardDepth = 0.1;
+
 export function createState(goBackToDices: () => void): GameState {
-    const board = createBoard();
+    const board = createBoard({
+        boardWidth: boardWidth,
+        boardHeight: boardHeight,
+        boardDepth: boardDepth,
+    });
 
     const actionStorage = useActionsStorage();
 
@@ -56,10 +64,13 @@ export function createState(goBackToDices: () => void): GameState {
             board.mesh.position.y += scenePosition.y;
             board.mesh.position.z += scenePosition.z;
             scene.add(board.mesh);
+            const itemCount = board.items.length;
+            const itemHeight = boardHeight / (itemCount + 1);
             board.items.forEach((item, index) => {
                 const itemMesh = item.mesh;
-                itemMesh.position.x = board.mesh.position.x;
-                itemMesh.position.y = board.mesh.position.y + 0.5 + index * 0.1;
+                itemMesh.position.x = board.mesh.position.x - boardWidth / 2 + itemHeight / 2;
+                itemMesh.position.y =
+                    board.mesh.position.y - boardHeight / 2 + (itemCount - index) * itemHeight;
                 itemMesh.position.z = board.mesh.position.z + 0.1;
                 scene.add(itemMesh);
             });
