@@ -66,11 +66,12 @@ export function createState(goBackToDices: () => void): GameState {
             scene.add(board.mesh);
             const itemCount = board.items.length;
             const itemHeight = boardHeight / (itemCount + 1);
+            const boardTop = board.mesh.position.x - boardWidth / 2;
+            const boardLeft = board.mesh.position.y - boardHeight / 2;
             board.items.forEach((item, index) => {
                 const itemMesh = item.mesh;
-                itemMesh.position.x = board.mesh.position.x - boardWidth / 2 + itemHeight / 2;
-                itemMesh.position.y =
-                    board.mesh.position.y - boardHeight / 2 + (itemCount - index) * itemHeight;
+                itemMesh.position.x = boardTop + itemHeight / 2;
+                itemMesh.position.y = boardLeft + (itemCount - index) * itemHeight;
                 itemMesh.position.z = board.mesh.position.z + 0.1;
                 scene.add(itemMesh);
             });
