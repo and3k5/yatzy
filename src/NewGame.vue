@@ -15,7 +15,7 @@
                 />
             </div>
         </transition-group>
-        <button type="button" class="start-game-button">Start game</button>
+        <button type="button" class="start-game-button" @click="startGame()">Start game</button>
     </div>
 </template>
 
@@ -60,6 +60,7 @@
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
     transition: background-color 400ms ease-out;
+    width: 100%;
 }
 .start-game-button:hover {
     background-color: #38c6ff;
@@ -89,6 +90,17 @@ function validatePlayer(key: string) {
     if (player.name.trim() === "" && !player.isGhost) {
         players.value.splice(players.value.indexOf(player), 1);
     }
+}
+
+const emit = defineEmits<{
+    (e: "start-game", playerNames: string[]): void;
+}>();
+
+function startGame() {
+    emit(
+        "start-game",
+        players.value.filter((x) => !("isGhost" in x)).map((x) => x.name),
+    );
 }
 
 watch(

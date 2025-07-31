@@ -1,9 +1,11 @@
+import type { StateController } from "../states/base";
 import type { Player } from "./player";
 
 export class Game {
     players: Player[];
     turnIndex = -1;
     diceRollsLeft = 0;
+    ctrl: StateController | undefined;
     constructor(players: Player[]) {
         this.players = players;
     }
@@ -22,5 +24,9 @@ export class Game {
             this.nextPlayer();
         } else {
         }
+    }
+
+    setController(ctrl: StateController) {
+        this.ctrl = ctrl;
     }
 }

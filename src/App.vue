@@ -3,13 +3,24 @@ import { onMounted, ref } from "vue";
 import { createGame } from "./game";
 import { useActionsStorage } from "./engine/actions";
 import NewGame from "./NewGame.vue";
+import { Game } from "./engine/logic/game";
+import { Player } from "./engine/logic/player";
 const cnvs = ref<HTMLCanvasElement>();
+
+const gameEngine = ref<ReturnType<typeof createGame>>();
+const hasGame = ref(false);
 
 const actionStorage = useActionsStorage();
 
 onMounted(() => {
-    createGame(cnvs.value);
+    gameEngine.value = createGame(cnvs.value);
 });
+
+function startGame(players: string[]) {
+    console.log("start game");
+    gameEngine.value!.startGame(new Game(players.map((x) => new Player(x))));
+    hasGame.value = true;
+}
 </script>
 
 <style lang="css" scoped>
@@ -62,8 +73,8 @@ onMounted(() => {
             </button>
         </template>
     </div>
-    <div class="start-game-overlay">
-        <NewGame></NewGame>
+    <div class="start-game-overlay" v-if="!hasGame">
+        <NewGame @start-game="startGame($event)"></NewGame>
     </div>
     <canvas ref="cnvs" class="graphics-canvas"></canvas>
 </template>
