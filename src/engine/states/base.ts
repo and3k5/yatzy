@@ -9,6 +9,8 @@ export interface GameState {
     scenePosition?: Vector3;
 }
 
+export type StateController = ReturnType<typeof createStateController>;
+
 export function createStateController(a: AnimationTask[], scene: Scene) {
     const states: GameState[] = [];
 
