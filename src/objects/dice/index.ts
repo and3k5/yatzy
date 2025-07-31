@@ -1,5 +1,7 @@
 import {
     BoxGeometry,
+    LinearFilter,
+    LinearMipMapLinearFilter,
     Mesh,
     MeshBasicMaterial,
     Object3D,
@@ -45,7 +47,16 @@ export function createDice() {
 
     const geometry = new BoxGeometry(0.5, 0.5, 0.5);
 
-    const materials = images.map((x) => new MeshBasicMaterial({ map: loader.load(x) }));
+    const materials = images.map((x) => {
+        const texture = loader.load(x, (tex) => {
+            tex.anisotropy = 32;
+            tex.minFilter = LinearMipMapLinearFilter;
+            tex.magFilter = LinearFilter;
+            tex.generateMipmaps = true;
+            tex.needsUpdate = true;
+        });
+        return new MeshBasicMaterial({ map: texture });
+    });
 
     const mesh: Object3D<EventMap> & Mesh = new Mesh(geometry, materials);
 
