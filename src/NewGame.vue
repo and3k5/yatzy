@@ -7,6 +7,7 @@
                     v-model="player.name"
                     @blur="validatePlayer(player.key)"
                     :class="{
+                        'player-name-field': true,
                         ghost:
                             players.length !== 1 &&
                             (('isGhost' in player && player.isGhost) || player.name.trim() === ''),
@@ -14,10 +15,29 @@
                 />
             </div>
         </transition-group>
+        <button type="button" class="start-game-button">Start game</button>
     </div>
 </template>
 
 <style lang="css" scoped>
+.player-name-field {
+    font-size: 1.2em;
+    padding: 0.5em 1em;
+    border: 2px solid #4f8cff;
+    border-radius: 6px;
+    margin-bottom: 0.5em;
+    outline: none;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(79, 140, 255, 0.08);
+    background: #f8fbff;
+}
+
+.player-name-field:focus {
+    border-color: #38c6ff;
+    box-shadow: 0 2px 8px rgba(56, 198, 255, 0.15);
+}
 .ghost {
     opacity: 0.65;
 }
@@ -28,6 +48,21 @@
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+.start-game-button {
+    background: #4f8cff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75em 2em;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
+    transition: background-color 400ms ease-out;
+}
+.start-game-button:hover {
+    background-color: #38c6ff;
 }
 </style>
 
