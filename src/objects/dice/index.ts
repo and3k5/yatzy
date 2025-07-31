@@ -105,20 +105,22 @@ export function createDice() {
         value: 1,
     };
 
+    const renderMesh = createRenderMesh();
+
     mesh.addEventListener("click", () => {
         dice.hold = !dice.hold;
-        renderMesh(mesh, dice.hold, false);
+        renderMesh(mesh, dice.hold, false, animations);
     });
 
     mesh.addEventListener("pointerover", () => {
-        renderMesh(mesh, dice.hold, true);
+        renderMesh(mesh, dice.hold, true, animations);
         if (renderer) {
             renderer.domElement.style.cursor = "pointer";
         }
     });
 
     mesh.addEventListener("pointerout", () => {
-        renderMesh(mesh, dice.hold, false);
+        renderMesh(mesh, dice.hold, false, animations);
         if (renderer) {
             renderer.domElement.style.cursor = "";
         }
@@ -127,18 +129,52 @@ export function createDice() {
     return dice;
 }
 
-function renderMesh(mesh: Mesh, hold: boolean, hover: boolean) {
-    if (hold) {
-        mesh.scale.x = 1.2;
-        mesh.scale.y = 1.2;
-        mesh.scale.z = 1.2;
-    } else if (hover) {
-        mesh.scale.x = 1.1;
-        mesh.scale.y = 1.1;
-        mesh.scale.z = 1.1;
-    } else {
-        mesh.scale.x = 1;
-        mesh.scale.y = 1;
-        mesh.scale.z = 1;
-    }
+function createRenderMesh() {
+    let animation: AnimationTask | null = null;
+
+    return function (
+        mesh: Mesh,
+        hold: boolean,
+        hover: boolean,
+        animations: AnimationTask[] | null,
+    ) {
+        const targetScale = hold ? 1.2 : hover ? 1.1 : 1;
+
+        const scaleModif = animations ? mesh.scale.clone() : mesh.scale;
+        scaleModif.x = targetScale;
+        scaleModif.y = targetScale;
+        scaleModif.z = targetScale;
+
+        if (animations) {
+            const anim: AnimationTask = {
+                run() {
+                    const speed = 0.2;
+                    const dx = scaleModif.x - mesh.scale.x;
+                    const dy = scaleModif.y - mesh.scale.y;
+                    const dz = scaleModif.z - mesh.scale.z;
+
+                    if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001 && Math.abs(dz) < 0.001) {
+                        mesh.scale.x = scaleModif.x;
+                        mesh.scale.y = scaleModif.y;
+                        mesh.scale.z = scaleModif.z;
+                        this.done = true;
+                        return { done: true };
+                    }
+
+                    mesh.scale.x += dx * speed;
+                    mesh.scale.y += dy * speed;
+                    mesh.scale.z += dz * speed;
+                    return {
+                        done: false,
+                    };
+                },
+                done: false,
+            };
+            if (animation != null) {
+                animation.done = true;
+            }
+            animation = anim;
+            animations.push(anim);
+        }
+    };
 }
