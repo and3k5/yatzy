@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { createGame } from "./game";
 import { useActionsStorage } from "./engine/actions";
+import NewGame from "./NewGame.vue";
 const cnvs = ref<HTMLCanvasElement>();
 
 const actionStorage = useActionsStorage();
@@ -20,6 +21,17 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     pointer-events: none;
+}
+.start-game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px) brightness(0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .action-btn {
     pointer-events: auto;
@@ -49,6 +61,9 @@ onMounted(() => {
                 {{ action.label }}
             </button>
         </template>
+    </div>
+    <div class="start-game-overlay">
+        <NewGame></NewGame>
     </div>
     <canvas ref="cnvs" class="graphics-canvas"></canvas>
 </template>
