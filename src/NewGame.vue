@@ -8,8 +8,8 @@
                     @blur="validatePlayer(player.key)"
                     :class="{
                         ghost:
-                            (players.length !== 1 && 'isGhost' in player && player.isGhost) ||
-                            player.name.trim() === '',
+                            players.length !== 1 &&
+                            (('isGhost' in player && player.isGhost) || player.name.trim() === ''),
                     }"
                 />
             </div>
