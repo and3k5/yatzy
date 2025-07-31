@@ -1,6 +1,8 @@
 import { BoxGeometry, Mesh } from "three";
 import { MeshBasicMaterial } from "three";
-import { createItem, type ItemType } from "./item";
+import { createItem, type ItemBase } from "./item";
+import { type CalculationItem } from "./item/calculated-field";
+import { type ItemType } from "./item/item-types";
 
 export function createBoard({
     boardWidth,
@@ -21,13 +23,24 @@ export function createBoard({
     mesh.receiveShadow = true;
 
     return {
-        items: [] as ReturnType<typeof createItem>[],
+        items: [] as ItemBase<ItemType>[],
         mesh,
-        addItem(key: string, label: string, type: ItemType) {
-            this.items.push(createItem(key, label, type));
+        addCalculatedField(key: string, label: string, calc: CalculationItem["calculation"]) {
+            this.items.push(createItem("calculated", { key, label, calculation: calc }));
+        },
+        addSummaryField(
+            key: string,
+            label: string,
+            filter: (
+                value: ItemBase<ItemType>,
+                index: number,
+                array: ItemBase<ItemType>[],
+            ) => boolean,
+        ) {
+            this.items.push(createItem("summary", { key, label, filter: filter }));
         },
         addField(key: string, label: string) {
-            this.addItem(key, label, "field");
+            this.items.push(createItem("field", { key, label }));
         },
     };
 }

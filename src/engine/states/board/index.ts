@@ -21,14 +21,18 @@ export function createState(goBackToDices: () => void): GameState {
 
     const txt = labels[lang]["default"];
 
+    const upperLabels = [1, 2, 3, 4, 5, 6].map((x) => x + "s"); // as `${1|2|3|4|5|6}s`[];
+
     board.addField("1s", txt["1s"]);
     board.addField("2s", txt["2s"]);
     board.addField("3s", txt["3s"]);
     board.addField("4s", txt["4s"]);
     board.addField("5s", txt["5s"]);
     board.addField("6s", txt["6s"]);
-    // Sum
-    // Bonus
+    board.addSummaryField("sum", txt["summary"], (x) => upperLabels.includes(x.key));
+    board.addCalculatedField("bonus", txt["bonus"], (items, player) => {
+        return player.getValue("sum") > 84 ? 50 : 0;
+    });
     board.addField("1pair", txt["1pair"]);
     board.addField("2pairs", txt["2pairs"]);
     board.addField("3ofakind", txt["3ofakind"]);
@@ -38,7 +42,7 @@ export function createState(goBackToDices: () => void): GameState {
     board.addField("house", txt["house"]);
     board.addField("chance", txt["chance"]);
     board.addField("yatzy", txt["yatzy"]);
-    // Total
+    board.addSummaryField("total", txt["total"], (item) => item.includeInScore);
 
     const backToDices = actionStorage.createAction({
         label: "Back to dices",
