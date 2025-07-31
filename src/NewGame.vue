@@ -1,7 +1,7 @@
 <template>
     <div>
-        <template v-for="player in players" :key="player.key">
-            <div>
+        <transition-group name="fade" tag="div">
+            <div v-for="player in players" :key="player.key">
                 <input
                     type="text"
                     v-model="player.name"
@@ -13,13 +13,21 @@
                     }"
                 />
             </div>
-        </template>
+        </transition-group>
     </div>
 </template>
 
 <style lang="css" scoped>
 .ghost {
     opacity: 0.65;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.4s;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
 
