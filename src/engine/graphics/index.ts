@@ -1,7 +1,7 @@
 import type { AnimationTask } from "@/engine/graphics/animation";
 import { createPointerListener } from "@/engine/graphics/pointer-listener";
 import { Camera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import type { createStateController } from "../states/base";
+import type { StateController } from "../states/base";
 
 function createCamera() {
     const camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -28,7 +28,7 @@ export function initGraphics(canvas: HTMLCanvasElement | OffscreenCanvas | undef
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    const ctrl: { value: ReturnType<typeof createStateController> | null } = { value: null };
+    const ctrl: { value: StateController | null } = { value: null };
     const animate = createAnimate(camera, scene, renderer, animations, ctrl);
     renderer.setAnimationLoop(animate);
 
@@ -39,7 +39,7 @@ export function initGraphics(canvas: HTMLCanvasElement | OffscreenCanvas | undef
         scene,
         camera,
         animations,
-        setController(c: ReturnType<typeof createStateController>) {
+        setController(c: StateController) {
             ctrl.value = c;
         },
     };
@@ -50,7 +50,7 @@ function createAnimate(
     scene: Scene,
     renderer: WebGLRenderer,
     animations: AnimationTask[],
-    ctrl: { value: ReturnType<typeof createStateController> | null },
+    ctrl: { value: StateController | null },
 ) {
     let lookTarget = scene.position;
     let cameraPosition = camera.position.clone();
